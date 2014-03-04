@@ -3,7 +3,7 @@ require 'cinch'
 require 'serialport'
 require 'tweetstream'
 
-# sp = SerialPort.new "/dev/ttyUSB1", 19200
+sp = SerialPort.new "/dev/ttyUSB0", 19200
 
 file = File.read('.././twitter.json')
 json = JSON.parse(file)
@@ -13,6 +13,7 @@ y = 0
 @a = 0
 @b = 23
 @parts = Array.new
+@parts_sorted = Array.new
 
 TweetStream.configure do |config|
   config.consumer_key       = json["consumer_key"]
@@ -33,17 +34,17 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
     @b = @a + 23
   end
   
-  puts "-"*23
   @parts.reverse_each do |x|
     if(!(x == [nil]))
-      p x
+      @parts_sorted << x
     end
   end
-  puts "-"*23
-
-  #sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
-  #sp.write("IN;DT*,1;PU0,#{y+200};SI0.5,0.5;LB#{@tweet}*;")
-  #sp.write("IN;DT*,1;PU0,#{y+400};SI0.5,0.5;LB#{'-'*20}*;")
+ 
+  sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
+  @parts_sorted.each do |x|
+    sp.write("IN;DT*,1;PU0,#{y+200};SI0.5,0.5;LB#{@x}*;")
+  end	 
+  sp.write("IN;DT*,1;PU0,#{y+400};SI0.5,0.5;LB#{'-'*20}*;")
 end
 
 
