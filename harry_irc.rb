@@ -10,7 +10,7 @@ bot = Cinch::Bot.new do
   configure do |c|
     c.nick = "HarryPlotter"
     c.server = "irc.freenode.org"
-    c.channels = ["#hodor"]
+    c.channels = ["#hasi"]
   end
 
   on :message do |m|
