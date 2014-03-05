@@ -3,18 +3,22 @@ require 'cinch'
 require 'serialport'
 require 'tweetstream'
 
+# Initializing the serial port
 sp = SerialPort.new "/dev/ttyUSB0", 19200
 
+# Reading and parsing the JSON file with Twitter credentials
 file = File.read('.././twitter.json')
 json = JSON.parse(file)
 
 # This is the holy variable for the y-axis on the plotter
 y = 0
 
+# Things for breaking down the tweets to a "plottable" length
 @a = 0
 @b = 23
 @parts = Array.new
 
+# Some Twitter magic
 TweetStream.configure do |config|
   config.consumer_key       = json["consumer_key"]
   config.consumer_secret    = json["consumer_secret"]
@@ -23,6 +27,7 @@ TweetStream.configure do |config|
   config.auth_method        = :oauth
 end
 
+# Here we check if the tweet contains our hashtag, #harryplotter or #harryplottr
 TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   y += 200
   @tweet = "[@#{status.user.screen_name}] #{status.text}"
@@ -34,9 +39,11 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
     @b = @a + 23
   end
   
+  # This is important. Very important.
   @parts.reverse!
   puts @parts
   
+  # Plotting the tweet
   sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
   @parts.each do |x|
     sp.write("IN;DT*,1;PU0,#{y+200};SI0.5,0.5;LB#{@x}*;")

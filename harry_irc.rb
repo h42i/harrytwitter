@@ -20,6 +20,7 @@ bot = Cinch::Bot.new do
   end
 end
 
+# STARTING THE ENGINE! /o/
 bot.start
 
 
