@@ -8,6 +8,7 @@ sp = SerialPort.new "/dev/ttyUSB0", 19200
 file = File.read('.././twitter.json')
 json = JSON.parse(file)
 
+# This is the holy variable for the y-axis on the plotter
 y = 0
 
 @a = 0
@@ -33,7 +34,7 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
     @b = @a + 23
   end
   
-  @parts.reverse
+  @parts.reverse!
   puts @parts
   
   sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
