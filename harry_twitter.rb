@@ -13,7 +13,6 @@ y = 0
 @a = 0
 @b = 23
 @parts = Array.new
-@parts_sorted = Array.new
 
 TweetStream.configure do |config|
   config.consumer_key       = json["consumer_key"]
@@ -25,23 +24,20 @@ end
 
 TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   y += 200
-  @tweet = "[#{status.user.screen_name}] #{status.text}"
-  @numparts = (161 / 23).to_i
+  @tweet = "[@#{status.user.screen_name}] #{status.text}"
+  @numparts = (@tweet.length / 23).to_i
   (@numparts + 1).times do |n|
-    puts n
-    @parts << ([@tweet[@a..@b]])
+    @apart = @tweet[@a..@b]
+    @parts << @apart unless @apart.empty?
     @a = @b
     @b = @a + 23
   end
   
-  @parts.reverse_each do |x|
-    if(!(x == [nil]))
-      @parts_sorted << x
-    end
-  end
- 
+  @parts.reverse
+  puts @parts
+  
   sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
-  @parts_sorted.each do |x|
+  @parts.each do |x|
     sp.write("IN;DT*,1;PU0,#{y+200};SI0.5,0.5;LB#{@x}*;")
   end	 
   sp.write("IN;DT*,1;PU0,#{y+400};SI0.5,0.5;LB#{'-'*20}*;")
