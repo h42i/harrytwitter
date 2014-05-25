@@ -1,0 +1,6 @@
+[Unit]
+Description=The Harry Plotter Service
+
+[Service]
+Type=Simple
+ExecStart=/usr/bin/ruby ~/harryplotter/bin/harry-twitter.rb
