@@ -1,12 +1,15 @@
 #!/usr/bin/ruby
 
 require 'json'
-require 'cinch'
 require 'serialport'
 require 'tweetstream'
 
+SERIALPORT = "/dev/ttyS0"
+
+puts "[harryplotter] Starting up..."
+
 # Initializing the serial port
-sp = SerialPort.new "/dev/ttyS0", 19200
+sp = SerialPort.new SERIALPORT, 19200
 
 # Reading and parsing the JSON file with Twitter credentials
 file = File.read('.././twitter.json')
@@ -14,11 +17,6 @@ json = JSON.parse(file)
 
 # This is the holy variable for the y-axis on the plotter
 y = 0
-
-# Things for breaking down the tweets to a "plottable" length
-#@a = 0
-#@b = 23
-#@parts = Array.new
 
 # Some Twitter magic
 TweetStream.configure do |config|
@@ -46,6 +44,8 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr', '@harryplottr', '
   # This is important. Very important.
   @parts.reverse!
   
+  # Rotate: RO90;
+
   # Plotting the tweet
   sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
   @parts.each do |x|
