@@ -1,6 +1,14 @@
 [Unit]
 Description=The Harry Plotter Service
+Requires=network.target
+After=network.target
 
 [Service]
 Type=Simple
-ExecStart=/usr/bin/ruby ~/harryplotter/bin/harry-twitter.rb
+User=hasi
+SyslogIdentifier=HarryPlotter
+WorkingDirectory=/home/hasi/harryplotter/harryplotter/
+ExecStart=/home/hasi/harryplotter/harryplotter/bin/harry-twitter.rb
+
+[Install]
+WantedBy=multi-user.target

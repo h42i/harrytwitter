@@ -4,7 +4,7 @@ require 'serialport'
 require 'tweetstream'
 
 # Initializing the serial port
-sp = SerialPort.new "/dev/ttyUSB0", 19200
+sp = SerialPort.new "/dev/ttyS0", 19200
 
 # Reading and parsing the JSON file with Twitter credentials
 file = File.read('.././twitter.json')
@@ -32,6 +32,7 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   @a = 0; @b = 23; @parts = Array.new 
   y += 200
   @tweet = "[@#{status.user.screen_name}] #{status.text}"
+  puts "TWEET: #{@tweet}"
   ((@tweet.length / 23) + 1).times do
     @apart = @tweet[@a..@b]
     @parts << @apart unless @apart.empty?
@@ -41,7 +42,6 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   
   # This is important. Very important.
   @parts.reverse!
-  puts @parts
   
   # Plotting the tweet
   sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
