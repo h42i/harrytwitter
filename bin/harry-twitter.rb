@@ -30,7 +30,7 @@ TweetStream.configure do |config|
 end
 
 # Here we check if the tweet contains our hashtag, #harryplotter or #harryplottr
-TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
+TweetStream::Client.new.track('#harryplotter', '#harryplottr', '#Formel1') do |status|
   @a = 0; @b = 23; @parts = Array.new 
   y += 200
   @tweet = "[@#{status.user.screen_name}] #{status.text}"
@@ -46,11 +46,11 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   @parts.reverse!
   
   # Plotting the tweet
-  sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
+  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*25}*;")
   @parts.each do |x|
     y += 300
-    sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{x}*;")
+    sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{x}*;")
   end	
   y += 400
-  sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
+  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*25}*;")
 end
