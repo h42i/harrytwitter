@@ -3,8 +3,13 @@ harryplotter
 
 His name is Plotter. Harry Plotter.
 
-IMPORTANT FOO!!
+Wichtig!
 --------
-Du musst nur am Gerät "rolle" auswählen.
-Danach im offline mode die rotationauf 90° stellen (wird noch automatisch gemacht)
-und dann wieder auf online stellen..
+* Der Medien-Typ für Endlos-Papier ist '''Rolle'''
+* Die Option '''Rotation''' muss auf '''90°''' eingestellt werden
+* Es sollte kein anderes Script parallel laufen
+
+TODO
+----
+* HPGL-Code erweitern, damit die Rotation nicht mehr manuell eingestellt werden muss
+* Einen Service für das ganze schreiben - inklusive Logging
