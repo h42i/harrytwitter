@@ -14,9 +14,9 @@ json = JSON.parse(file)
 y = 0
 
 # Things for breaking down the tweets to a "plottable" length
-@a = 0
-@b = 23
-@parts = Array.new
+#@a = 0
+#@b = 23
+#@parts = Array.new
 
 # Some Twitter magic
 TweetStream.configure do |config|
@@ -29,10 +29,10 @@ end
 
 # Here we check if the tweet contains our hashtag, #harryplotter or #harryplottr
 TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
+  @a = 0; @b = 23; @parts = Array.new 
   y += 200
   @tweet = "[@#{status.user.screen_name}] #{status.text}"
-  @numparts = (@tweet.length / 23).to_i
-  (@numparts + 1).times do |n|
+  ((@tweet.length / 23) + 1).times do
     @apart = @tweet[@a..@b]
     @parts << @apart unless @apart.empty?
     @a = @b
@@ -46,10 +46,9 @@ TweetStream::Client.new.track('#harryplotter', '#harryplottr') do |status|
   # Plotting the tweet
   sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
   @parts.each do |x|
-    sp.write("IN;DT*,1;PU0,#{y+200};SI0.5,0.5;LB#{@x}*;")
-  end	 
-  sp.write("IN;DT*,1;PU0,#{y+400};SI0.5,0.5;LB#{'-'*20}*;")
+    y += 300
+    sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{x}*;")
+  end	
+  y += 400
+  sp.write("IN;DT*,1;PU0,#{y};SI0.5,0.5;LB#{'-'*20}*;")
 end
-
-
-
