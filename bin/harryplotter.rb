@@ -5,13 +5,13 @@ require 'serialport'
 require 'tweetstream'
 
 # Read config
-config = JSON.parse(File.read('./config.json'))["harryplotter"]
+# Nope.
 
 # Initializing the serial port
-sp = SerialPort.new config["serialport"], 19200
+sp = SerialPort.new "/dev/ttyS0", 19200
 
 # Reading and parsing the JSON file with the Twitter credentials
-creds = JSON.parse("#{config["credentials"]}")
+creds = JSON.parse(".././twitter.json")
 
 # This is the holy variable for the y-axis on the plotter
 y = 0
