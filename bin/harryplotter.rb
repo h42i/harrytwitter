@@ -4,16 +4,14 @@ require 'json'
 require 'serialport'
 require 'tweetstream'
 
-config = JSON.parse(
-  File.read('./config.json')
-)["harryplotter"]
+# Read config
+config = JSON.parse(File.read('./config.json'))["harryplotter"]
 
 # Initializing the serial port
 sp = SerialPort.new config["serialport"], 19200
 
 # Reading and parsing the JSON file with the Twitter credentials
-creds = JSON.parse(
-  File.read('.././twitter.json'))
+creds = JSON.parse("#{config["credentials"]}")
 
 # This is the holy variable for the y-axis on the plotter
 y = 0
@@ -47,15 +45,13 @@ TweetStream::Client.new.track(['#harryplotter', '#harryplottr', '@harryplottr', 
       
   # This is important. Very important.
   @parts.reverse!
-  
-  # Rotate: RO90;
 
   # Plotting the tweet
-  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
+  sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
   @parts.each do |x|
     y += 300
-    sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{x}*;")
+    sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{x}*;")
   end	
   y += 400
-  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
+  sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
 end
