@@ -1,0 +1,6 @@
+{
+  "harryplotter": {
+    "serialport": "/dev/ttyS0",
+    "credentials": ".././twitter.json"
+  }
+}
