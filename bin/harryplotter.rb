@@ -1,17 +1,17 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require 'json'
 require 'serialport'
 require 'tweetstream'
 
 # Read config
-# Nope.
+# Nope, not today
 
 # Initializing the serial port
-sp = SerialPort.new "/dev/ttyS0", 19200
+sp = SerialPort.new "/dev/ttyUSB0", 19200
 
 # Reading and parsing the JSON file with the Twitter credentials
-creds = JSON.parse(".././twitter.json")
+creds = JSON.parse(File.read("../.././twitter.json"))
 
 # This is the holy variable for the y-axis on the plotter
 y = 0
@@ -30,28 +30,39 @@ TweetStream::Client.new.track(['#harryplotter', '#harryplottr', '@harryplottr', 
                               '#hasileaks', '@hasileaks']) do |status|
   
   @parts = Array.new 
-  
-  y += 200
-  @tweet = "[@#{status.user.screen_name}] #{status.text}".split
   @string = ""
-  @tweet.each do |n|
-    if @string.length < 43
+
+  y += 200
+  @tweet = "[@#{status.user.screen_name}] #{status.text}"
+  puts @tweet
+  @array = @tweet.split
+  
+  # We must determine the number of parts
+  @number =  (@tweet.length - (@tweet.length % 43)) / 43
+  
+  n = 0
+  # Now, we split the tweet
+  @array.each do |n|
+    if @string.length < 43 && n != @array.last
       @string = @string + n + " "
+    elsif n == @array.last
+      @string = @string + n
+      @parts << @string
     else
       @parts << @string
-      string = ""
+      @string = ""
     end
   end
-      
+
   # This is important. Very important.
   @parts.reverse!
 
   # Plotting the tweet
-  sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
+  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
   @parts.each do |x|
     y += 300
-    sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{x}*;")
+    sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{x}*;")
   end	
   y += 400
-  sp.write("IN;DT*,1;RO90;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
+  sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
 end
