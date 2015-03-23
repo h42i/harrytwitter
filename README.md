@@ -3,15 +3,16 @@ harryplotter
 
 His name is Plotter. Harry Plotter.
 
-Wichtig!
---------
+He is a vinyl cutter and plotter working at the Hackspace Siegen, Germany.
+For more information, please visit: http://hasi.it/wiki/Harry_Plotter [german].
+
+This code helps him to plot tweets with a specific hashtag. He likes doing that.
+
+## Usage information (german)
 
 * Der Medien-Typ für Endlos-Papier ist `Rolle`
 * Die Option `Rotation` muss auf `90°` eingestellt werden
-* Es sollte kein anderes Script parallel laufen
+* Keine anderen Skripte dürfen parallel laufen!
 
-TODO
-----
-* HPGL-Code erweitern, damit die Rotation nicht mehr manuell eingestellt werden muss
-* Einen Service für das ganze schreiben - inklusive Logging
-* Umbruch bei Wörtern
+## TODO
+* Automatic rotation should be a built-in feature

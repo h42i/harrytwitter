@@ -4,16 +4,13 @@ require 'json'
 require 'serialport'
 require 'tweetstream'
 
-# Read config
-# Nope, not today
+CONFIG = JSON.parse(File.read("config.json"))
+TWITTR = JSON.parse(File.read(CONFIG["credentials"]))
 
 # Initializing the serial port
-sp = SerialPort.new "/dev/ttyUSB0", 19200
+sp = SerialPort.new(CONFIG["serial_port"], 19200)
 
-# Reading and parsing the JSON file with the Twitter credentials
-creds = JSON.parse(File.read("../.././twitter.json"))
-
-# This is the holy variable for the y-axis on the plotter
+# The holy variable, which holds the y-axis on the plotter
 y = 0
 
 # Some Twitter magic
@@ -25,41 +22,37 @@ TweetStream.configure do |config|
   config.auth_method        = :oauth
 end
 
-# Here we check if the tweet contains our hashtag, #harryplotter or #harryplottr
-TweetStream::Client.new.track(['#harryplotter', '#harryplottr', '@harryplottr', '@h42i', 
-                              '#hasileaks', '@hasileaks']) do |status|
+TweetStream::Client.new.track(CONFIG["hashtags"]) do |status|
   
-  @parts = Array.new 
-  @string = ""
+  parts = [] 
+  string = ""
 
   y += 200
-  @tweet = "[@#{status.user.screen_name}] #{status.text}"
-  puts @tweet
-  @array = @tweet.split
+  tweet = "[@#{status.user.screen_name}] #{status.text}"
+  array = tweet.split
   
   # We must determine the number of parts
-  @number =  (@tweet.length - (@tweet.length % 43)) / 43
+  # number = (tweet.length - (tweet.length % 43)) / 43
   
-  n = 0
   # Now, we split the tweet
-  @array.each do |n|
-    if @string.length < 43 && n != @array.last
-      @string = @string + n + " "
-    elsif n == @array.last
-      @string = @string + n
-      @parts << @string
+  array.each do |n|
+    if string.length < 43 && n != array.last
+      string = string + n + " "
+    elsif n == array.last
+      string = string + n
+      parts << string
     else
-      @parts << @string
-      @string = ""
+      parts << string
+      string = ""
     end
   end
 
-  # This is important. Very important.
-  @parts.reverse!
+  # Turn it upside down!
+  parts.reverse!
 
   # Plotting the tweet
   sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{'-'*43}*;")
-  @parts.each do |x|
+  parts.each do |x|
     y += 300
     sp.write("IN;DT*,1;PU0,#{y};SI0.3,0.3;LB#{x}*;")
   end	

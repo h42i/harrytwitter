@@ -1,6 +1,5 @@
 {
-  "harryplotter": {
-    "serialport": "/dev/ttyS0",
-    "credentials": ".././twitter.json"
-  }
+  "serial_port": "/dev/ttyS0",
+  "credentials": ".././twitter.json",
+  "hashtags": ["#harryplotter", "#harryplottr", "@harryplottr", "@h42i", "#hasileaks", "@hasileaks"] 
 }
